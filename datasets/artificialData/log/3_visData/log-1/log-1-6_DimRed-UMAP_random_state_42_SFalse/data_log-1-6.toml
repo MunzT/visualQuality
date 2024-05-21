@@ -1,0 +1,12 @@
+TrialID = "log-1-6"
+EveryXSample = 1
+IgnoreFirstDimension = false
+DimRed = "UMAP"
+UseSubsampling = false
+SubsamplingCount = 5
+SubsamplingCountFixed = true
+SubsamplingType = "catmullRom"
+UseSubsamplesForEmbedding = false
+
+[UMAP]
+random_state = 42

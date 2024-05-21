@@ -1,0 +1,14 @@
+TrialID = "spiral_circle-1-2"
+EveryXSample = 1
+IgnoreFirstDimension = false
+DimRed = "MDS"
+UseSubsampling = false
+SubsamplingCount = 5
+SubsamplingCountFixed = true
+SubsamplingType = "catmullRom"
+UseSubsamplesForEmbedding = false
+
+[MDS]
+metric = true
+random_state = 32489013
+dissimilarity = "euclidean"

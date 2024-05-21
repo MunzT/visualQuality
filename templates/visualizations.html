@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html class="full-height">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Visual Quality of Multidimensional Time Series Projections</title>
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+        <link rel='stylesheet' href="{{ url_for('static', filename='style.css') }}"/>
+        <script type="text/javascript" src="static/d3/d3.min.js"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='visualizations.js') }}"></script>
+        <style type="text/css">
+            @font-face {
+                font-family: DeliusSwashCaps;
+                src: url("{{ url_for('static', filename='fonts/DeliusSwashCaps-Regular.ttf') }}");
+            }
+        </style>
+    </head>
+    <body class="height99" onload="init()">
+        <!-- main area -->
+        <div class="app containerLevel0 height99">
+            <div class="leftContainer">
+                <svg id="barChart1" class="leftItem">
+                </svg>
+                <p></p>
+                <svg id="barChart2" class="leftItem">
+                </svg>
+                <p></p>
+                <svg id="barChart3" class="leftItem">
+                </svg>
+            </div>
+            <div class="leftContainer">
+                <svg id="barChart4" class="leftItem">
+                </svg>
+                <p></p>
+                <svg id="scatterPlot1" class="leftItem">
+                </svg>
+                <p></p>
+                <svg id="barChart5" class="leftItem">
+                </svg>
+            </div>
+            <div class="itemLevel0 itemLevel0-center mainContainer full-height">
+                <div class="mainItem">
+                    <svg id="mainSvg" width="100%" height="100%">
+                    </svg>
+                </div>
+                <div id="legend" style="margin-top:5px">
+                    <span style="margin-top:5px">Samples: </span>
+                    <svg id="samplesColorMapSvg" width="200" height="19"/>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span>Connections: </span>
+                    <svg id="linesColorMapSvg" width="200" height="19"/>
+                    <button class="openbtn" onclick="openNav()" id="settingsButton">☰ Settings</button>
+                    <script>
+                        function openNav() {
+                          document.getElementById("mySidebar").style.width = "auto";
+                          document.getElementById("mySidebar").style.overflow = "visible";
+                          document.getElementById("settingsButton").style.visibility = "hidden";
+                          updatePlots();
+                        }
+                        function closeNav() {
+                          document.getElementById("mySidebar").style.width = "0";
+                          document.getElementById("mySidebar").style.overflow = "hidden";
+                          document.getElementById("settingsButton").style.visibility = "visible";
+                          updatePlots();
+                        }
+                    </script>
+
+                </div>
+            </div>
+
+            <div id="mySidebar" class="sidebar itemLevel0 full-height rightContainer">
+                <div class="menu rightItem">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&#x2B9E;</a>
+                    <section class="menuBox">
+                        <input class="collapseCheckbox" type="checkbox" id="handle0" style="display:none" checked="checked" >
+                        <h2 class="handle">
+                            <label for="handle0">Select Dataset</label>
+                        </h2>
+                        <div class="content">
+                            <select class="formContainer" id="dataSets"></select>
+                            <div class="buttonbox">
+                                <button onclick="switchView('p')" id="switchToAlternativeVisP">Projection</button>
+                                <button onclick="switchView('u')" id="switchToAlternativeVisU" class="buttonSelection">Uncertainty Highlighting</button>
+                                <button onclick="switchView('h')" id="switchToAlternativeVisH">Halo Visualization</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="menuBox">
+                        <input class="collapseCheckbox" type="checkbox" id="handle1" style="display:none" >
+                        <h2 class="handle">
+                            <label for="handle1">Dataset Filter</label>
+                        </h2>
+                        <div class="content">
+                            <div class="content formContainer">
+                                <div class="item40">
+                                Original Trial ID:
+                                </div>
+                                <select class="item60" id="trialIDs" onchange="changeDatasetOptions()">
+                                    {% for value in trialids %}
+                                    <option value="{{ value }}">{{ value }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="content formContainer">
+                                <div class="item40">
+                                Preprocessing:
+                                </div>
+                                <select class="item60" id="preprocessingType" onchange="changeDatasetOptions()">
+                                    {% for value in preprocessingtype %}
+                                    <option value="{{ value }}">{{ value }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="content formContainer">
+                                <div class="item40">
+                                    Dimensionality Reduction:
+                                </div>
+                                <select class="item60" id="dimRedMethod" onchange="changeDatasetOptions()">
+                                    {% for value in dimredmethod %}
+                                    <option value="{{ value }}">{{ value }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="menuBox">
+                        <input class="collapseCheckbox" type="checkbox" id="handle2" style="display:none">
+                        <h2 class="handle">
+                            <label for="handle2">Dataset</label>
+                        </h2>
+                        <div class="content innerMenu1">
+                            <div class="item30">
+                                <text><b class="largerFont">Projection:</b></text>
+                                <text id="settingsText"></text>
+                            </div>
+                            <div style="padding-left: 5px" class="item30">
+                                <text><b class="largerFont">Preprocessing:</b></text>
+                                <text id="preprocessingSettingsText"></text>
+                            </div>
+                            <div style="padding-left: 5px" class="item40">
+                                <text><b class="largerFont">Metrics:</b></text>
+                                <br>
+                                <span title="Trustworthiness [0, 1]: 1 is good">
+                                    <text><b>Trustworthiness:</b></text>
+                                    <text id="trustworthiness"></text>
+                                </span>
+                                <br>
+                                <span title="Continuity [0, 1]: 1 is good">
+                                    <text><b>Continuity:</b></text>
+                                    <text id="continuity"></text>
+                                </span>
+                                <br>
+                                <span title="Normalized Stress: 0 is good">
+                                    <text><b>Normalized Stress:</b></text>
+                                    <text id="normalizedStress"></text>
+                                </span>
+                                <br>
+                                <span title="Pearson correlation.">
+                                    <text><b>Pearson:</b>
+                                    </text>
+                                    <text id="pearson"></text>
+                                </span>
+                                <br>
+                                <span title="Spearman.">
+                                    <text><b>Spearman:</b>
+                                    </text>
+                                    <text id="spearman"></text>
+                                </span>
+                                <br>
+                                <span title="Kendall.">
+                                    <text><b>Kendall:</b>
+                                    </text>
+                                    <text id="kendall"></text>
+                                </span>
+                                <br>
+                                <span title="Normalized Stress (Time): 0 is good">
+                                    <text><b>Normalized Stress (Time):</b></text>
+                                    <text id="normalizedStress_time"></text>
+                                </span>
+                                <br>
+                                <span title="Pearson correlation.">
+                                    <text><b>Pearson (Time):</b>
+                                    </text>
+                                    <text id="pearson_time"></text>
+                                </span>
+                                <br>
+                                <span title="Spearman.">
+                                    <text><b>Spearman (Time):</b>
+                                    </text>
+                                    <text id="spearman_time"></text>
+                                </span>
+                                <br>
+                                <span title="Kendall.">
+                                    <text><b>Kendall (Time):</b>
+                                    </text>
+                                    <text id="kendall_time"></text>
+                                </span>
+                                <br>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="menuBox">
+                        <input class="collapseCheckbox" type="checkbox" id="handle3" style="display:none">
+                        <h2 class="handle">
+                            <label for="handle3">View</label>
+                        </h2>
+                        <div class="content formMainContainer">
+                            <div class="content formContainer">
+                                <label class="item25">
+                                    <input type="checkbox" id="showSamples" value="showSamples" checked="checked">
+                                    Samples
+                                </label>
+                                <label class="item25">
+                                    <input type="checkbox" id="showLines" value="showLines" checked="checked">
+                                    Connections
+                                </label>
+                                <label class="item25">
+                                    <input type="checkbox" id="showHalos" value="showHalos" checked="checked">
+                                    Intersections
+                                </label>
+                                <label class="item25">
+                                    <input type="checkbox" id="showLabels" value="showLabels">
+                                    Labels
+                                </label>
+                            </div>
+                            <div class="content formContainer">
+                                <div class="item20">
+                                    Samples:
+                                </div>
+                                <select class="item80" id="sampleMetric">
+                                    {% for key in sampleMetricTypes %}
+                                        <option value="{{ key }}">{{ sampleMetricTypes[key] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="content formContainer">
+                                <div class="item20">
+                                    Connections:
+                                </div>
+                                <select class="item80" id="lineMetric">
+                                    {% for key in lineMetricTypes %}
+                                    <option value="{{ key }}">{{ lineMetricTypes[key] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="formContainer">
+                                <div class="item30" id="slidingWindowInput">
+                                    <div>
+                                        Sliding Window:
+                                    </div>
+                                    <div>
+                                        <input style="width: 40%" type="text" id="slidingWindowSize" value="5">
+                                    </div>
+                                </div>
+                                <div class="item30" id="neighborhoodInput">
+                                    <div>
+                                        Local Neighborhood:
+                                    </div>
+                                    <div>
+                                        <input style="width: 40%" type="text" id="maxNumberOfNeighbors" value="7">
+                                    </div>
+                                </div>
+                                <div class="item30">
+                                    <div>
+                                        Global Neighborhood:
+                                    </div>
+                                    <div>
+                                        <input style="width: 40%" type="text" id="localNeighborhoodSize" value="10">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="content formContainer">
+                                <div class="item20">
+                                Samples:
+                                </div>
+                                <div class="item20">
+                                  <input type="checkbox" id="standardization_samples" checked>
+                                    Standard.
+                                </div>
+                                <div class="item20">
+                                  <input type="checkbox" id="maxScaling_samples">
+                                    [-1,0,1]
+                                </div>
+                                <div class="item20">
+                                  <input type="checkbox" id="minmaxScaling_samples">
+                                    [0,1]
+                                </div>
+                                <div class="item20">
+                                  <input type="checkbox" id="posNegScaling_samples">
+                                    [-1,1]
+                                </div>
+                            </div>
+
+                            <div class="content formContainer">
+                                <div class="item20">
+                                Connections:
+                                </div>
+                                <div class="item20">
+                                  <input type="checkbox" id="standardization_connections" checked>
+                                    Standard.
+                                </div>
+                                <div class="item20">
+                                  <input type="checkbox" id="maxScaling_connections">
+                                    [-1,0,1]
+                                </div>
+                                <div class="item20">
+                                  <input type="checkbox" id="minmaxScaling_connections">
+                                    [0,1]
+                                </div>
+                                <div class="item20">
+                                  <input type="checkbox" id="posNegScaling_connections">
+                                    [-1,1]
+                                </div>
+                            </div>
+
+                            <div class="formContainer">
+                                <div class="item33">
+                                    Samples:
+                                    <input style="width: 90%" type="range" min="0" max="50" value="12" class="slider" id="sampleSlider">
+                                </div>
+                                <div class="item33">
+                                    Connections:
+                                    <input style="width: 90%" type="range" min="0" max="50" value="10" class="slider" id="lineSlider">
+                                </div>
+                                <div class="item33">
+                                    Halos:
+                                    <input style="width: 90%" type="range" min="0" max="50" value="10" class="slider" id="haloSlider">
+                                </div>
+                            </div>
+
+                            <div class="content formContainer">
+                                <div class="item30">
+                                    Connections:
+                                </div>
+                                <select class="item70" id="lineType">
+                                    {% for key in interpolationTypes %}
+                                    <option value="{{ key }}">{{ interpolationTypes[key] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="content formContainer">
+                                <div class="item30">
+                                    #Subsamples:
+                                </div>
+                                <input class="item70" type="text" id="subsamples" value="15">
+                            </div>
+
+                            <div class="content formContainer">
+                                <div class="item30">
+                                    Time Series Filter:
+                                </div>
+                                <input class="item70" type="text" id="timeSeriesFilter" value="">
+                            </div>
+
+                            <div class="buttonbox">
+                                <button onclick="recalculate()">Update</button>
+                                <button id="resetButton" >Reset View</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="buttonbox">
+                        <button onclick="saveSVG()" id=saveButtonSVG">Save SVG</button>
+                        <button onclick="savePNG()" id=saveButtonPNG">Save PNG</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- for image export -->
+        <div style="display:none">
+            <div id="svgdataurl"></div>
+            <div id="pngdataurl"></div>
+            <canvas id="invisibleCanvas"></canvas>
+        </div>
+    </body>
+</html>

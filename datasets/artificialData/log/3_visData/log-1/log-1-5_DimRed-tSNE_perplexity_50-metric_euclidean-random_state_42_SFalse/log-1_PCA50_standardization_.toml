@@ -1,0 +1,11 @@
+TrialID = "log-1"
+EveryXSample = 1
+IgnoreFirstDimension = false
+DimRed = "PCA"
+Dims = 50
+OrigDims = 2
+Preprocessing = "standardization"
+
+[PCA]
+n_components = 50
+random_state = 42

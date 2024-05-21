@@ -1,0 +1,14 @@
+TrialID = "covid19_confirmed_global-0-3"
+EveryXSample = 1
+IgnoreFirstDimension = false
+DimRed = "tSNE"
+UseSubsampling = false
+SubsamplingCount = 5
+SubsamplingCountFixed = true
+SubsamplingType = "catmullRom"
+UseSubsamplesForEmbedding = false
+
+[tSNE]
+perplexity = 10
+metric = "euclidean"
+random_state = 42

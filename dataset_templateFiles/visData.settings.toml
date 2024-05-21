@@ -1,0 +1,36 @@
+[general]
+trial = []
+everyXSample = [1]
+ignoreFirstDimension = [false]
+
+## Dim Reduction
+dimRedMethod = ["PCA", "MDS", "tSNE", "UMAP"]
+
+## For each Dim Red method
+[PCA]
+random_state = [42]
+
+[MDS]
+random_state = [42]
+dissimilarity = ["euclidean"]
+metric = [true]
+
+[tSNE]
+random_state = [42]
+metric = ["euclidean"]
+perplexity = [30]
+
+[UMAP]
+random_state = [42]
+
+## Interpolation
+[subsampling]
+subsampleInHighDimSpace =[false]
+subsampleCount = [5]
+subsampleCountFixed = [true]
+subsampleType = [catmullRom]
+useSubsamplesForEmbedding = [false]
+
+[export]
+## Saved images
+continuousLabels = [true]

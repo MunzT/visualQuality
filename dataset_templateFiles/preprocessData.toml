@@ -1,0 +1,8 @@
+[general]
+
+preprocessing = ["no", "standardization"]
+
+[PCA] 
+random_state = [42]
+metric =["euclidean"]
+n_components = [50]

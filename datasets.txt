@@ -1,0 +1,8 @@
+datasets/karman
+datasets/artificialData/teaser
+datasets/artificialData/lines
+datasets/artificialData/clusters
+datasets/artificialData/spirals
+datasets/artificialData/log
+datasets/covid-19
+datasets/hurricane

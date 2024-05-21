@@ -1,0 +1,12 @@
+TrialID = "karman-0-0"
+EveryXSample = 1
+IgnoreFirstDimension = false
+DimRed = "PCA"
+UseSubsampling = false
+SubsamplingCount = 5
+SubsamplingCountFixed = true
+SubsamplingType = "catmullRom"
+UseSubsamplesForEmbedding = false
+
+[PCA]
+random_state = 42

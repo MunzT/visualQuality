@@ -1,0 +1,13 @@
+[general]
+# all trials
+trial = []
+
+everyXSample = [1]
+ignoreFirstDimension = [false]
+
+preprocessing = ["none", "normalization", "standardization", "standardizationAndNormalization"]
+
+[PCA]
+random_state = [42]
+metric =["euclidean"]
+n_components = [50]

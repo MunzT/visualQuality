@@ -1,0 +1,28 @@
+[general]
+everyXSample = [1]
+ignoreFirstDimension = [false]
+
+## Dim Reduction
+dimRedMethod = ["PCA", "MDS", "tSNE", "UMAP"]
+
+## For each Dim Red method
+[PCA]
+random_state = [42]
+
+[MDS]
+random_state = [42, 32489013]
+dissimilarity = ["euclidean"]
+metric = [true]
+
+[tSNE]
+random_state = [42]
+metric = ["euclidean"]
+perplexity = [10, 30, 50]
+
+[UMAP]
+random_state = [42]
+
+
+[export]
+## Saved images
+continuousLabels = [false]

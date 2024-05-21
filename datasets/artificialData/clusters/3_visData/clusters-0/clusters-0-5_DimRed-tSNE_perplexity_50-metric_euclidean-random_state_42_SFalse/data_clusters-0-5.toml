@@ -1,0 +1,14 @@
+TrialID = "clusters-0-5"
+EveryXSample = 1
+IgnoreFirstDimension = false
+DimRed = "tSNE"
+UseSubsampling = false
+SubsamplingCount = 5
+SubsamplingCountFixed = true
+SubsamplingType = "catmullRom"
+UseSubsamplesForEmbedding = false
+
+[tSNE]
+perplexity = 50
+metric = "euclidean"
+random_state = 42

@@ -1,0 +1,3 @@
+# orig id, path to csv file with <= 50 dimensions, preprocessing settings, orig data path(s), orig file type
+log-0,"2_preprocessedData/original/log-0_PCA50_original.csv","2_preprocessedData/original/log-0_PCA50_original.toml",[data/log_time.csv],csv
+log-1,"2_preprocessedData/standardization/log-1_PCA50_standardization.csv","2_preprocessedData/standardization/log-1_PCA50_standardization.toml",[data/log_time.csv],csv

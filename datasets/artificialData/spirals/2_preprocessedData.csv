@@ -1,0 +1,5 @@
+# orig id, path to csv file with <= 50 dimensions, preprocessing settings, orig data path(s), orig file type
+spiral_varying-0,"2_preprocessedData/original/spiral_varying-0_PCA50_original.csv","2_preprocessedData/original/spiral_varying-0_PCA50_original.toml",[data/z_spiral_1000.csv],csv
+spiral_varying-1,"2_preprocessedData/standardization/spiral_varying-1_PCA50_standardization.csv","2_preprocessedData/standardization/spiral_varying-1_PCA50_standardization.toml",[data/z_spiral_1000.csv],csv
+spiral_circle-0,"2_preprocessedData/original/spiral_circle-0_PCA50_original.csv","2_preprocessedData/original/spiral_circle-0_PCA50_original.toml",[data/z_circle_1000.csv],csv
+spiral_circle-1,"2_preprocessedData/standardization/spiral_circle-1_PCA50_standardization.csv","2_preprocessedData/standardization/spiral_circle-1_PCA50_standardization.toml",[data/z_circle_1000.csv],csv

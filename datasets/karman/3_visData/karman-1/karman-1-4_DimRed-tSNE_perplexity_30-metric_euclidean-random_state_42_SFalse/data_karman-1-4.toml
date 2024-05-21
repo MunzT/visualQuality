@@ -1,0 +1,14 @@
+TrialID = "karman-1-4"
+EveryXSample = 1
+IgnoreFirstDimension = false
+DimRed = "tSNE"
+UseSubsampling = false
+SubsamplingCount = 5
+SubsamplingCountFixed = true
+SubsamplingType = "catmullRom"
+UseSubsamplesForEmbedding = false
+
+[tSNE]
+perplexity = 30
+metric = "euclidean"
+random_state = 42
